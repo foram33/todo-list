@@ -1,18 +1,8 @@
-  .input-container {
+.task-item {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-  }
-  
-  .task-list {
-    margin-top: 20px;
-  }
-  
-  .task-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+}
   
   .task-text {
     flex: 1;

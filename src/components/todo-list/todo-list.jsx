@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ToDoItem from "../todo-item/todo-item";
 import { MdAdd } from "react-icons/md";
+import ToDoItem from "../todo-item/todo-item";
+import './todo-list.css';
 
 const ToDoList = () => {
 
