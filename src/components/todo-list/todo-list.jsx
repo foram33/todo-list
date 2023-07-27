@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { MdAdd } from "react-icons/md";
+import { fetchTasks, addTask, deleteTask } from "../../apiService";
 import ToDoItem from "../todo-item/todo-item";
 import './todo-list.css';
 
@@ -14,13 +14,8 @@ const ToDoList = () => {
     }, []);
 
     const fetchData = async () => {
-        try {
-            const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
-            setToDoItem(response.data);
-        }
-        catch(error) {
-            console.error(error)
-        };
+        const task = await fetchTasks()
+        setToDoItem(task);
     }
 
     const handleAddTask = async () => {
@@ -30,32 +25,25 @@ const ToDoList = () => {
                 "id":newTaskValue.toLowerCase, 
                 "title": newTaskValue, 
                 "completed": false
-            };
-            try {  
-                const response = await axios.post('https://jsonplaceholder.typicode.com/todos', newTask);
-                setToDoItem([...todoItem, response.data]);
+            }; 
+
+            const newAddedTask = await addTask(newTask);
+            if(newAddedTask) {
+                setToDoItem([...todoItem, newAddedTask]);
                 setNewTaskValue('');
             }
-            catch(error) { 
-                console.error(error) 
-            };
         }
     }
 
     const handleDeleteTask = async (taskId) => {
-        try {
-            await axios.delete(`https://jsonplaceholder.typicode.com/todos/${taskId}`);
-            setToDoItem(todoItem.filter(task => task.id !== taskId))
-        }
-        catch(error) {
-            console.error(error);
-        }
+        await deleteTask(taskId);
+        setToDoItem(todoItem.filter(task => task.id !== taskId))
     }
 
     return(
         <>
             <div className="input-container">
-                <input type="text" name="newtask" className="task-input" value={newTaskValue} onChange={(event) => setNewTaskValue(event.target.value)} />
+                <input type="text" name="newtask" className="task-input" value={newTaskValue} onChange={(event) => setNewTaskValue(event.target.value)} placeholder="Add your new task" />
                 <button className="add-button" onClick={handleAddTask}> <MdAdd /> </button>
             </div>
             <div className="task-list">
