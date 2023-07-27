@@ -14,8 +14,9 @@ const ToDoList = () => {
     }, []);
 
     const fetchData = async () => {
-        const task = await fetchTasks()
-        setToDoItem(task);
+        const tasks = await fetchTasks();
+        const sortedTasks = tasks.sort((a,b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
+        setToDoItem(sortedTasks);
     }
 
     const handleAddTask = async () => {
