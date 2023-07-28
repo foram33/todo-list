@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
-import { fetchTasks, addTask, deleteTask } from "../../apiService";
+import { fetchTasks, addTask, updateTask, deleteTask } from "../../apiService";
 import ToDoItem from "../todo-item/todo-item";
 import './todo-list.css';
 
@@ -41,6 +41,18 @@ const ToDoList = () => {
         setToDoItem(todoItem.filter(task => task.id !== taskId))
     }
 
+    const handleEditTask = async (taskId, newTitle) => {
+        const updatedTasks = todoItem.map((task) => {
+            if(task.id === taskId) {
+                return { ...task, title: newTitle };
+            }
+            return task;
+        })
+        
+        setToDoItem(updatedTasks);
+        await updateTask(taskId, newTitle);
+    }
+
     return(
         <>
             <div className="input-container">
@@ -51,6 +63,7 @@ const ToDoList = () => {
                 {todoItem.map((task) => <ToDoItem
                     key={task.id}
                     task={task}
+                    onEdit={(newTitle) => handleEditTask(task.id, newTitle)}
                     onDelete={() => handleDeleteTask(task.id)}
                     onToggleStateChange={(taskId) => setToDoItem(todoItem.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task)))} />
                 )}
